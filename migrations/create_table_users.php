@@ -11,3 +11,5 @@ $query = 'CREATE TABLE users(
 )';
 
 $mysqli->query($query);
+
+unset($query);
