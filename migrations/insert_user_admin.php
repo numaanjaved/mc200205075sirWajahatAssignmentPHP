@@ -6,7 +6,7 @@ $stmt = $mysqli->prepare($query);
 $stmt->bind_param('ssii', $username, $password, $level, $status);
 
 $username = 'admin@gmail.com';
-$password = password_hash('admin123', PASSWORD_DEFAULT);
+$password = hash('sha256','admin123');
 $level = 3;
 $status = 1;
 
