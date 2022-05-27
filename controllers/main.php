@@ -4,6 +4,11 @@ class main{
     public static function login(){
         include('./views/login.html');
     }
+    public static function displayMain(){
+        if(!isset($_SESSION)){
+            main::login();
+        }        
+    }
     public static function validate(){
         if($_POST){
             $userName = $_POST['username'];
@@ -21,11 +26,11 @@ class main{
                 main::authenticate($userName, $password);
             }
             else{
-                main::login();
+                echo "Incorrect Username or Password";
             }
         }
         else{
-            die();
+            main::login();
         }
     }
     public static function authenticate($username, $password){
@@ -47,6 +52,8 @@ class main{
             }
             else{
                 main::createSession($isRegistered);   
+
+                main::loggedIn();
             }
         }
         //unset($users, $loginUser);
@@ -59,6 +66,25 @@ class main{
         $_SESSION['level'] = $isRegistered->level;
     }
     public static function logout(){
-        session_destroy();
+        session_destroy(); die("You Logged Out");
+    }
+    public static function loggedIn(){
+        if(isset($_SESSION)){
+            echo "Logged In! ";
+   
+           $level = $_SESSION['level'];
+           $user = ''; 
+           if($level == 3){
+           $user = 'Admin';
+           }
+           else if($level == 2){
+               $user = 'Pharmacist';
+           }
+           else if($level == 1){
+               $user = 'Costumer';
+           }
+           echo "Welcome to the ".$user." Panel<br>";
+           echo "<a href='index.php/logout'>Logout</a>";
+       }
     }
 }
