@@ -2,12 +2,10 @@
 
 class main{
     public static function login(){
-        include('./views/login.html');
-    }
-    public static function displayMain(){
+        $root = dirname(__FILE__,2);
         if(!isset($_SESSION)){
-            main::login();
-        }        
+            include($root.'/views/login.html');
+        } 
     }
     public static function validate(){
         if($_POST){
@@ -37,7 +35,7 @@ class main{
         $loginUser = new Users($username, $password);
         $users = new Users();
         $isRegistered = $users->findUser($username); 
-        ?> <pre> <?php print_r($loginUser); print_r($isRegistered);
+        
         if(!$isRegistered){
             echo "You are not registered with the system";
         }
@@ -53,7 +51,7 @@ class main{
             else{
                 main::createSession($isRegistered);   
 
-                main::loggedIn();
+                dashboard::loggedIn();
             }
         }
         //unset($users, $loginUser);
@@ -66,25 +64,14 @@ class main{
         $_SESSION['level'] = $isRegistered->level;
     }
     public static function logout(){
-        session_destroy(); die("You Logged Out");
-    }
-    public static function loggedIn(){
         if(isset($_SESSION)){
-            echo "Logged In! ";
-   
-           $level = $_SESSION['level'];
-           $user = ''; 
-           if($level == 3){
-           $user = 'Admin';
-           }
-           else if($level == 2){
-               $user = 'Pharmacist';
-           }
-           else if($level == 1){
-               $user = 'Costumer';
-           }
-           echo "Welcome to the ".$user." Panel<br>";
-           echo "<a href='index.php/logout'>Logout</a>";
-       }
+            session_destroy();
+            main::login();
+        }
+        else{
+            main::login();
+        }
+        
     }
+    
 }
